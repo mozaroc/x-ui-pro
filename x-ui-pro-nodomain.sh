@@ -512,7 +512,7 @@ if [[ -f $XUIDB ]]; then
         client_id=$(/usr/local/x-ui/bin/xray-linux-amd64 uuid)
         client_id2=$(/usr/local/x-ui/bin/xray-linux-amd64 uuid)
         client_id3=$(/usr/local/x-ui/bin/xray-linux-amd64 uuid)
-	trojan_pass=$(tr -dc A-Za-z0-9 </dev/urandom | head -c "$(shuf -i 6-12 -n 1)")
+	trojan_pass=$(gen_random_string 10)
         emoji_flag=$(LC_ALL=en_US.UTF-8 curl -s https://ipwho.is/ | jq -r '.flag.emoji')
        	sqlite3 $XUIDB <<EOF
              INSERT INTO "settings" ("key", "value") VALUES ("subPort",  '${sub_port}');
