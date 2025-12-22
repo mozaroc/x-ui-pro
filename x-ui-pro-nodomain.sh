@@ -45,6 +45,7 @@ make_port() {
 		fi
 	done
 }
+
 sub_port=$(make_port)
 panel_port=$(make_port)
 web_path=$(gen_random_string 10)
@@ -977,11 +978,8 @@ apt-get update && apt-get install -y -q wget curl tar tzdata
 if systemctl is-active --quiet x-ui; then
 	x-ui restart
 else
-	
-	wget -O /root/panel.sh "https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh"
-	chmod +x /root/panel.sh
-	script -q -c "bash -lc '/root/panel.sh'" /var/log/xui-install.log
-	rm -rf /root/panel.sh
+    install_panel	
+
 	
 	UPDATE_XUIDB
 	if ! systemctl is-enabled --quiet x-ui; then
