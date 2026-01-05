@@ -9,9 +9,7 @@ done
 
 XUIPORT=$(sqlite3 -list /etc/x-ui/x-ui.db 'SELECT "value" FROM settings WHERE "key"="webPort" LIMIT 1;' 2>&1)
 XUIPATH=$(sqlite3 -list /etc/x-ui/x-ui.db 'SELECT "value" FROM settings WHERE "key"="webBasePath" LIMIT 1;' 2>&1)
-sub_port=$(sqlite3 -list /etc/x-ui/x-ui.db 'SELECT "value" FROM settings WHERE "key"="subPort" LIMIT 1;' 2>&1)
-sub_path=$(sqlite3 -list /etc/x-ui/x-ui.db 'SELECT "value" FROM settings WHERE "key"="subPath" LIMIT 1;' 2>&1)
-web_path
+
 
 
 mkdir -p /root/cert/${domain}
@@ -31,7 +29,7 @@ XUIPATH_NORM="${XUIPATH_NORM%/}"
 LOC1="/${XUIPATH_NORM}/"
 LOC2="/${XUIPATH_NORM}"
 
-# тело location (8 пробелов как в nginx-конфиге)
+
 read -r -d '' XUI_BODY <<EOF
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
@@ -68,9 +66,8 @@ BEGIN{
 {
   line=$0
 
-  # если сейчас внутри целевого location — пропускаем до закрывающей }
+
   if (inloc) {
-    # считаем скобки, чтобы корректно выйти на нужной }
     for (i=1; i<=length(line); i++) {
       c=substr(line,i,1)
       if (c=="{") depth++
@@ -83,7 +80,6 @@ BEGIN{
     next
   }
 
-  # старт блока location /path/ {
   if (match(line, "^[[:space:]]*location[[:space:]]+" loc1 "[[:space:]]*\\{")) {
     emit_location(loc1); replaced1=1
     inloc=1; depth=1
@@ -95,7 +91,6 @@ BEGIN{
     next
   }
 
-  # перед include — удобное место вставить, если не нашли location
   if (!inserted && line ~ /^[[:space:]]*include[[:space:]]+\/etc\/nginx\/snippets\/includes\.conf;/) {
     if (!replaced1) { emit_location(loc1); replaced1=1 }
     if (!replaced2) { emit_location(loc2); replaced2=1 }
@@ -108,8 +103,6 @@ BEGIN{
 }
 
 END{
-  # если include не было — можно было бы вставить перед концом server{}.
-  # В этом варианте — просто оставляем как есть.
 }
 ' "$NGINX_CONF" > "$tmp" && cat "$tmp" > "$NGINX_CONF" && rm -f "$tmp"
 
