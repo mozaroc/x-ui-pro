@@ -8,48 +8,6 @@ msg_inf() { echo -e "\e[1;34m$1\e[0m";}
 echo;msg_inf '           ___    _   _   _  '	;
 msg_inf		 ' \/ __ | |  | __ |_) |_) / \ '	;
 msg_inf		 ' /\    |_| _|_   |   | \ \_/ '	; echo
-##################################OS & CPU Preflight Check#############################################
-PREFLIGHT_FAIL=0
-
-# --- OS version check: Ubuntu >= 24 or Debian 12/13 ---
-if [[ -f /etc/os-release ]]; then
-	. /etc/os-release
-	os_id="${ID,,}"
-	os_ver="${VERSION_ID%%.*}"
-	case "$os_id" in
-		ubuntu)
-			if [[ -n "$os_ver" ]] && (( os_ver < 24 )); then
-				msg_err "Unsupported OS: Ubuntu $VERSION_ID detected. Ubuntu 24+ is required. Please upgrade your OS."
-				PREFLIGHT_FAIL=1
-			fi
-			;;
-		debian)
-			if [[ -n "$os_ver" ]] && (( os_ver < 12 )); then
-				msg_err "Unsupported OS: Debian $VERSION_ID detected. Debian 12 or 13 is required. Please upgrade your OS."
-				PREFLIGHT_FAIL=1
-			fi
-			;;
-		*)
-			msg_err "Unsupported OS: $PRETTY_NAME. Only Ubuntu 24+ and Debian 12/13 are supported."
-			PREFLIGHT_FAIL=1
-			;;
-	esac
-else
-	msg_err "Cannot detect OS: /etc/os-release not found."
-	PREFLIGHT_FAIL=1
-fi
-
-# --- CPU model check: reject QEMU virtual CPU ---
-CPU_MODEL=$(grep -m1 'model name' /proc/cpuinfo 2>/dev/null | cut -d: -f2 | xargs)
-if [[ "$CPU_MODEL" == *"QEMU"* ]]; then
-	msg_err "QEMU virtual CPU detected ($CPU_MODEL). Please contact your hosting provider's support and request changing the CPU model to host CPU."
-	PREFLIGHT_FAIL=1
-fi
-
-if (( PREFLIGHT_FAIL )); then
-	msg_err "Preflight checks failed. Exiting."
-	exit 1
-fi
 ##################################Variables#############################################################
 XUIDB="/etc/x-ui/x-ui.db";domain="";UNINSTALL="x";INSTALL="n";PNLNUM=1;CFALLOW="n";CLASH=0;CUSTOMWEBSUB=0
 Pak=$(type apt &>/dev/null && echo "apt" || echo "yum")
