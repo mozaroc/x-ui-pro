@@ -532,7 +532,7 @@ if [[ -f $XUIDB ]]; then
         output=$(/usr/local/x-ui/bin/xray-linux-amd64 x25519)
 
         private_key=$(echo "$output" | grep "^PrivateKey:" | awk '{print $2}')
-        public_key=$(echo "$output" | grep "^Password:" | awk '{print $2}')
+        public_key=$(echo "$output" | grep "^Password" | awk '{print $3}')
 
         client_id=$(/usr/local/x-ui/bin/xray-linux-amd64 uuid)
         client_id2=$(/usr/local/x-ui/bin/xray-linux-amd64 uuid)
@@ -545,6 +545,7 @@ if [[ -f $XUIDB ]]; then
 	     INSERT INTO "settings" ("key", "value") VALUES ("subURI",  '${sub_uri}');
              INSERT INTO "settings" ("key", "value") VALUES ("subJsonPath",  '${json_path}');
 	     INSERT INTO "settings" ("key", "value") VALUES ("subJsonURI",  '${json_uri}');
+		 INSERT INTO "settings" ("key", "value") VALUES ("subClashEnable",  'false');
              INSERT INTO "settings" ("key", "value") VALUES ("subEnable",  'true');
              INSERT INTO "settings" ("key", "value") VALUES ("webListen",  '');
 	     INSERT INTO "settings" ("key", "value") VALUES ("webDomain",  '');
@@ -648,7 +649,7 @@ if [[ -f $XUIDB ]]; then
     ],
     "settings": {
       "publicKey": "${public_key}",
-      "fingerprint": "random",
+      "fingerprint": "chrome",
       "serverName": "",
       "spiderX": "/"
     }
