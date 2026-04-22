@@ -743,7 +743,7 @@ if [[ -f $XUIDB ]]; then
              '0',
 	     '0',
              '${emoji_flag} xhttp',
-	     '1',
+	     '0',
              '0',
 	     '/dev/shm/uds2023.sock,0666',
              '0',
