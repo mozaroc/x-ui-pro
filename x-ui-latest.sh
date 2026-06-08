@@ -535,9 +535,6 @@ if [[ -f $XUIDB ]]; then
         private_key=$(echo "$output" | grep "^PrivateKey:" | awk '{print $2}')
         public_key=$(echo "$output" | grep "^Password" | awk '{print $3}')
 
-        client_id=$(/usr/local/x-ui/bin/xray-linux-amd64 uuid)
-        client_id2=$(/usr/local/x-ui/bin/xray-linux-amd64 uuid)
-        client_id3=$(/usr/local/x-ui/bin/xray-linux-amd64 uuid)
 	trojan_pass=$(gen_random_string 10)
         emoji_flag=$(LC_ALL=en_US.UTF-8 curl -s https://ipwho.is/ | jq -r '.flag.emoji')
        	sqlite3 $XUIDB <<EOF
@@ -581,10 +578,6 @@ if [[ -f $XUIDB ]]; then
 	     INSERT INTO "settings" ("key", "value") VALUES ("subJsonMux",  '');
              INSERT INTO "settings" ("key", "value") VALUES ("subJsonRules",  '');
 	     INSERT INTO "settings" ("key", "value") VALUES ("datepicker",  'gregorian');
-             INSERT INTO "client_traffics" ("inbound_id","enable","email","up","down","expiry_time","total","reset") VALUES ('1','1','first','0','0','0','0','0');
-	     INSERT INTO "client_traffics" ("inbound_id","enable","email","up","down","expiry_time","total","reset") VALUES ('2','1','first_1','0','0','0','0','0');
-		   INSERT INTO "client_traffics" ("inbound_id","enable","email","up","down","expiry_time","total","reset") VALUES ('3','1','firstX','0','0','0','0','0');
-	     INSERT INTO "client_traffics" ("inbound_id","enable","email","up","down","expiry_time","total","reset") VALUES ('4','1','firstT','0','0','0','0','0');
              INSERT INTO "inbounds" ("user_id","up","down","total","remark","enable","expiry_time","listen","port","protocol","settings","stream_settings","tag","sniffing") VALUES ( 
              '1',
 	     '0',
@@ -598,21 +591,7 @@ if [[ -f $XUIDB ]]; then
 	     'vless',
              '{
 	     "clients": [
-    {
-      "id": "${client_id}",
-      "flow": "xtls-rprx-vision",
-      "email": "first",
-      "limitIp": 0,
-      "totalGB": 0,
-      "expiryTime": 0,
-      "enable": true,
-      "tgId": "",
-      "subId": "first",
-      "reset": 0,
-      "created_at": 1756726925000,
-      "updated_at": 1756726925000
 
-    }
   ],
   "decryption": "none",
   "fallbacks": []
@@ -689,21 +668,6 @@ if [[ -f $XUIDB ]]; then
 	     'vless',
              '{
   "clients": [
-    {
-      "id": "${client_id2}",
-      "flow": "",
-      "email": "first_1",
-      "limitIp": 0,
-      "totalGB": 0,
-      "expiryTime": 0,
-      "enable": true,
-      "tgId": "",
-      "subId": "first",
-      "reset": 0,
-      "created_at": 1756726925000,
-      "updated_at": 1756726925000
-
-    }
   ],
   "decryption": "none",
   "fallbacks": []
@@ -751,20 +715,6 @@ if [[ -f $XUIDB ]]; then
 	     'vless',
              '{
   "clients": [
-    {
-      "id": "${client_id3}",
-      "flow": "",
-      "email": "firstX",
-      "limitIp": 0,
-      "totalGB": 0,
-      "expiryTime": 0,
-      "enable": true,
-      "tgId": "",
-      "subId": "first",
-      "reset": 0,
-	  "created_at": 1756726925000,
-      "updated_at": 1756726925000
-    }
   ],
   "decryption": "none",
   "fallbacks": []
@@ -834,20 +784,6 @@ if [[ -f $XUIDB ]]; then
 		 'trojan',
 		 '{
   "clients": [
-    {
-      "comment": "",
-      "created_at": 1756726925000,
-      "email": "firstT",
-      "enable": true,
-      "expiryTime": 0,
-      "limitIp": 0,
-      "password": "${trojan_pass}",
-      "reset": 0,
-      "subId": "first",
-      "tgId": 0,
-      "totalGB": 0,
-      "updated_at": 1756726925000
-    }
   ],
   "fallbacks": []
 }',
